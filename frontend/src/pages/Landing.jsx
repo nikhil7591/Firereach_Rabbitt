@@ -15,15 +15,23 @@ import './Landing.css';
 
 function Landing() {
   useEffect(() => {
-    if (window.location.hash) {
-      const id = window.location.hash.replace('#', '').trim();
-      const target = document.getElementById(id);
+    const hash = String(window.location.hash || '').trim();
+    if (!hash) {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      return;
+    }
+
+    const scrollToHashTarget = () => {
+      const target = document.querySelector(hash);
       if (target) {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        return;
       }
-    }
-    window.scrollTo({ top: 0, behavior: 'auto' });
+    };
+
+    // Wait for sections to render before scrolling to hash target.
+    window.requestAnimationFrame(() => {
+      window.setTimeout(scrollToHashTarget, 60);
+    });
   }, []);
 
   return (

@@ -87,13 +87,18 @@ export default function ProfilePage() {
         ]);
         if (!active) return;
         setUser(meRes.user || null);
-        setProfileForm((prev) => ({
-          ...normalizeProfileDetails(getStoredProfileDetails(), meRes.user || {}),
-          company: prev.company || normalizeProfileDetails(getStoredProfileDetails(), meRes.user || {}).company,
-          role: prev.role || normalizeProfileDetails(getStoredProfileDetails(), meRes.user || {}).role,
-          website: prev.website || normalizeProfileDetails(getStoredProfileDetails(), meRes.user || {}).website,
-          icpFocus: prev.icpFocus || normalizeProfileDetails(getStoredProfileDetails(), meRes.user || {}).icpFocus,
-        }));
+        // Only update profileForm if it's empty or from stored data
+        setProfileForm((prev) => {
+          const normalized = normalizeProfileDetails(getStoredProfileDetails(), meRes.user || {});
+          // Use stored values if available, otherwise use API values
+          return {
+            ...normalized,
+            company: prev.company || normalized.company,
+            role: prev.role || normalized.role,
+            website: prev.website || normalized.website,
+            icpFocus: prev.icpFocus || normalized.icpFocus,
+          };
+        });
         setPlan(planRes || null);
         setCredits(creditRes || null);
         setHistory(Array.isArray(historyRes.history) ? historyRes.history : []);

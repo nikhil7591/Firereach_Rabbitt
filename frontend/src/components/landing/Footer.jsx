@@ -2,6 +2,15 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Flame, ArrowRight, Twitter, Instagram, Linkedin } from 'lucide-react';
 
+const getLaunchAppTarget = () => {
+  try {
+    const session = JSON.parse(window.localStorage.getItem('firereach_session') || 'null');
+    return session?.token ? '/app' : '/auth?mode=login';
+  } catch {
+    return '/auth?mode=login';
+  }
+};
+
 export default function Footer() {
   return (
     <footer className="relative pt-24 pb-8 px-6">
@@ -20,7 +29,7 @@ export default function Footer() {
           Define your ICP. Deploy the agent. Get personalized B2B outreach in under 3 minutes.
         </p>
         <Link
-          to="/auth"
+          to={getLaunchAppTarget()}
           className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-sm hover:opacity-90 transition-opacity no-underline shadow-lg shadow-indigo-500/25"
         >
           Launch App <ArrowRight className="w-4 h-4" />

@@ -3,6 +3,15 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Volume2, VolumeX, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+const getLaunchAppTarget = () => {
+  try {
+    const session = JSON.parse(window.localStorage.getItem('firereach_session') || 'null');
+    return session?.token ? '/app' : '/auth?mode=login';
+  } catch {
+    return '/auth?mode=login';
+  }
+};
+
 export default function Hero() {
   const videoRef = useRef(null);
   const [isMuted, setIsMuted] = useState(true);
@@ -118,7 +127,7 @@ export default function Hero() {
               className="flex flex-wrap gap-4 justify-center lg:justify-start"
             >
               <Link
-                to="/auth"
+                to={getLaunchAppTarget()}
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-sm hover:opacity-90 transition-opacity no-underline shadow-lg shadow-indigo-500/25"
               >
                 <Zap className="w-4 h-4" /> Launch App

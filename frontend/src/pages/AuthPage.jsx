@@ -108,7 +108,7 @@ function AuthPage() {
       if (mode === 'signup') {
         navigate('/profile?onboarding=1');
       } else {
-        navigate('/');
+        navigate('/app');
       }
     } catch (requestError) {
       const message = requestError?.response?.data?.message || requestError?.message || 'Authentication request failed.';

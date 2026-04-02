@@ -539,12 +539,30 @@ function App() {
     }
 
     try {
+      // Ensure result has required fields for display
+      const enrichedForStorage = {
+        ...workflowResult,
+        // Ensure summary exists with company_count
+        summary: {
+          ...(workflowResult.summary || {}),
+          company_count: workflowResult.summary?.company_count || 
+                        (Array.isArray(workflowResult.companies) ? workflowResult.companies.length : 0),
+        },
+        // Ensure status is set
+        status: workflowResult.status || 'completed',
+        // Ensure selected_company_name is set (from rankings or companies)
+        selected_company_name: workflowResult.selected_company_name || 
+                              (Array.isArray(workflowResult.rankings) && workflowResult.rankings[0]?.company_name) ||
+                              (Array.isArray(workflowResult.companies) && workflowResult.companies[0]?.company_name) || 
+                              '',
+      };
+
       await saveSearchHistory(sessionToken, {
         icp: inputs.icp,
         send_mode: inputs.send_mode,
         target_company: inputs.target_company,
         test_recipient_email: inputs.test_recipient_email,
-        result: workflowResult,
+        result: enrichedForStorage,
       });
     } catch {
       // Ignore history save failure to keep primary workflow responsive.

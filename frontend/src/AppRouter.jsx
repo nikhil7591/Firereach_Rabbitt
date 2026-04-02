@@ -44,30 +44,15 @@ function PublicAuthRoute({ children }) {
 }
 
 function ScrollToTopOnRouteChange() {
-  const { pathname, hash } = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
 
-    if (hash) {
-      const elementId = hash.replace('#', '').trim();
-      const scrollToHash = () => {
-        const target = document.getElementById(elementId);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          return;
-        }
-        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-      };
-
-      requestAnimationFrame(scrollToHash);
-      return;
-    }
-
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  }, [pathname, hash]);
+  }, [pathname]);
 
   return null;
 }
